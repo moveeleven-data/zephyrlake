@@ -1,0 +1,22 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+
+# Local env/config
+.env
+.envrc
+.DS_Store
+
+# Test/editor scratch
+**/.pytest_cache/
+**/.ipynb_checkpoints/
+
+# Project outputs
+data/out/
