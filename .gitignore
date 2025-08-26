@@ -20,3 +20,6 @@ venv/
 
 # Project outputs
 data/out/
+
+# Other files
+annotated/

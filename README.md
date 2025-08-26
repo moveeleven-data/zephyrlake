@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="assets/zephyr_logo.png" alt="Zephyrlake – OpenAQ batch pipeline logo" width="220"/>
-</p>
-
 <h1 align="center">Zephyrlake: OpenAQ Batch Pipeline</h1>
 
 <p align="center">
@@ -59,7 +55,7 @@ To run the pipeline, provide:
 - `--pages` — number of pages to fetch  
 
 ```bash
-python -m zephyrlake --sensor 359 --since 2025-08-01 --out data/out --pages 3
+PYTHONPATH=src python -m zephyrlake --sensor 359 --since 2025-08-01 --out data/out --pages 3
 ```
 
 ---
@@ -93,3 +89,4 @@ data/out/
 <p align="center">
   Built by <a href="https://github.com/moveeleven-data">Matthew Tripodi</a>
 </p>
+

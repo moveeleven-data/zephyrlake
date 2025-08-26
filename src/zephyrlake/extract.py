@@ -1,8 +1,6 @@
 # src/zephyrlake/extract.py
 # Purpose: fetch measurements for one sensor from OpenAQ with a tiny, readable retry.
 
-from __future__ import annotations
-
 import os
 import time
 from typing import Dict, List
@@ -65,9 +63,7 @@ def fetch(sensor_id: int, since_date: str, pages: int) -> List[Row]:
             utc = (period.get("datetimeFrom") or {}).get("utc")
             collected.append(
                 {
-                    "city": None,
-                    "country": None,
-                    "location": str(sensor_id),  # simple sensor tag
+                    "location": str(sensor_id),
                     "parameter": par.get("name"),
                     "unit": par.get("units"),
                     "value": item.get("value"),

@@ -1,8 +1,6 @@
 # src/zephyrlake/__main__.py
 # Purpose: CLI entrypoint that runs extract → transform → load.
 
-from __future__ import annotations
-
 import argparse
 from pathlib import Path
 
