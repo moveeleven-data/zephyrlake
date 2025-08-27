@@ -1,5 +1,5 @@
 # src/zephyrlake/load.py
-# Purpose: Write one Parquet file per day, skipping duplicates.
+# Write one Parquet file per day, skipping duplicates.
 
 import hashlib
 from pathlib import Path

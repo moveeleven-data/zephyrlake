@@ -1,5 +1,5 @@
 # tests/test_load.py
-# Purpose: Prove the Parquet writer is idempotent.
+# Prove the Parquet writer is idempotent.
 
 from pathlib import Path
 

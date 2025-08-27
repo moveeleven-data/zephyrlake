@@ -1,5 +1,5 @@
 # tests/test_transform.py
-# Purpose: Prove that raw JSON rows transform into a valid, typed DataFrame.
+# Prove that raw JSON rows transform into a valid, typed DataFrame.
 
 import json
 from pathlib import Path

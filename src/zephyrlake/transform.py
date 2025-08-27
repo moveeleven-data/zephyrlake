@@ -1,16 +1,14 @@
 # src/zephyrlake/transform.py
-# Purpose: Normalize raw records into a typed DataFrame.
-
-from typing import Dict, List
+# Normalize raw records into a typed DataFrame.
 
 import pandas as pd
 
-# Define a type alias: each row contains sensor measurement fields.
+# Type alias for a sensor measurement record
 # e.g. {"location": "359", "parameter": "pm25", "value": 12.3}
-Row = Dict[str, object]
+Row = dict[str, object]
 
 
-def to_frame(rows: List[Row]) -> pd.DataFrame:
+def to_frame(rows: list[Row]) -> pd.DataFrame:
     """
     Normalize raw records (list of dictionaries) into a DataFrame.
 
@@ -26,7 +24,6 @@ def to_frame(rows: List[Row]) -> pd.DataFrame:
     """
     df = pd.DataFrame.from_records(rows)
 
-    # Return early if no data.
     if df.empty:
         return df
 
@@ -37,10 +34,10 @@ def to_frame(rows: List[Row]) -> pd.DataFrame:
     # Derive event_date partition key: YYYY-MM-DD as string.
     df["event_date"] = df["date_utc"].dt.date.astype("string")
 
-    # Convert sensor readings to float64.
+    # Convert sensor readings to float64. (or int64 if there are no NULLs)
     # 1. Sensor readings are usually ±1 µg/m³. Base-10 is not needed.
     # 2. Float cols are backed by Numpy arrays and vectorized.
-    df["value"] = pd.to_numeric(df["value"], errors="coerce").astype("float64")
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
 
     # Return columns in a fixed order. `df.reindex` fills missing cols with NaN.
     df = df.reindex(
