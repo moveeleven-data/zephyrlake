@@ -4,7 +4,7 @@
 import pandas as pd
 
 # Type alias for a sensor measurement record
-# e.g. {"location": "359", "parameter": "pm25", "value": 12.3}
+# e.g. {"sensor_id": 359, "parameter": "pm25", "value": 12.3}
 Measurement = dict[str, object]
 
 
@@ -15,7 +15,7 @@ def to_frame(rows: list[Measurement]) -> pd.DataFrame:
     Returns
     -------
     pd.DataFrame
-        - location   (string ID for the sensor)
+        - sensor_id  (string ID for the sensor)
         - parameter  (what was measured)
         - unit       (unit of measure)
         - value      (numeric measurement)
@@ -42,7 +42,7 @@ def to_frame(rows: list[Measurement]) -> pd.DataFrame:
     # Return columns in a fixed order. `df.reindex` fills missing cols with NaN.
     df = df.reindex(
         columns=[
-            "location",
+            "sensor_id",
             "parameter",
             "unit",
             "value",

@@ -13,6 +13,7 @@ venv/
 .env
 .envrc
 .DS_Store
+.idea
 
 # Test/editor scratch
 **/.pytest_cache/

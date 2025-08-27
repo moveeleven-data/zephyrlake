@@ -1,4 +1,4 @@
-<h1 align="center">Zephyrlake</h1>
+<h1 align="center">Zephyrlake: Air Quality Data Pipeline</h1>
 
 <p align="center">
   Fetch global air quality sensor readings from <a href="https://openaq.org/">OpenAQ</a> and save them as daily Parquet 

@@ -17,7 +17,7 @@ RESULTS_PER_PAGE   = 100                        # Max rows per page
 PAGE_DELAY         = 5                          # Delay between page fetches
 
 # Type alias for a sensor measurement record
-# e.g. {"location": "359", "parameter": "pm25", "value": 12.3}
+# e.g. {"sensor_id": 359, "parameter": "pm25", "value": 12.3}
 Measurement = dict[str, object]
 
 
@@ -65,7 +65,7 @@ def _normalize_measurement(raw_item, sensor_id) -> Measurement:
 
     # Map the raw fields into a consistent format
     measurement = {
-        "location":  str(sensor_id),
+        "sensor_id": str(sensor_id),
         "parameter": param_info.get("name"),
         "unit":      param_info.get("units"),
         "value":     raw_item.get("value"),
