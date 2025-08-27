@@ -1,7 +1,8 @@
-<h1 align="center">Zephyrlake: OpenAQ Batch Pipeline</h1>
+<h1 align="center">Zephyrlake</h1>
 
 <p align="center">
-  Fetch OpenAQ sensor readings and save them as daily Parquet files.
+  Fetch global air quality sensor readings from <a href="https://openaq.org/">OpenAQ</a> and save them as daily Parquet 
+files.
   <br/><br/>
 </p>
 

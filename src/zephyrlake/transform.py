@@ -5,10 +5,10 @@ import pandas as pd
 
 # Type alias for a sensor measurement record
 # e.g. {"location": "359", "parameter": "pm25", "value": 12.3}
-Row = dict[str, object]
+Measurement = dict[str, object]
 
 
-def to_frame(rows: list[Row]) -> pd.DataFrame:
+def to_frame(rows: list[Measurement]) -> pd.DataFrame:
     """
     Normalize raw records (list of dictionaries) into a DataFrame.
 

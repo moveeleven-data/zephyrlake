@@ -11,7 +11,7 @@ try:
 except Exception:
     pass
 
-from .extract import fetch
+from .extract import collect_sensor_measurements
 from .transform import to_frame
 from .load import write_parquet_idempotent
 
@@ -25,7 +25,11 @@ def main() -> None:
     args = parser.parse_args()
 
     # Extract
-    rows = fetch(sensor_id=args.sensor, since_date=args.since, pages=args.pages)
+    rows = collect_sensor_measurements(
+        sensor_id=args.sensor,
+        start_time=args.since,
+        max_pages=args.pages
+    )
     print(f"Fetched {len(rows)} rows from sensor {args.sensor} since {args.since}")
 
     # Transform
