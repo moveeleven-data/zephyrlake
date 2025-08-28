@@ -11,8 +11,8 @@ try:
 except Exception:
     pass
 
-from .extract import collect_sensor_measurements
-from .transform import to_frame
+from .extract import collect_sensor_data
+from .transform import build_sensor_dataframe
 from .load import write_parquet_idempotent
 
 
@@ -28,7 +28,7 @@ def main() -> None:
     # Coerce plain dates (YYYY-MM-DD) to UTC midnight (YYYY-MM-DDT00:00:00Z)
     # See docs/time-boundaries.md for why.
     since = args.since if "T" in args.since else f"{args.since}T00:00:00Z"
-    rows = collect_sensor_measurements(
+    rows = collect_sensor_data(
         sensor_id=args.sensor,
         start_time=since,
         max_pages=args.pages
@@ -36,7 +36,7 @@ def main() -> None:
     print(f"Fetched {len(rows)} rows from sensor {args.sensor} since {args.since}")
 
     # Transform
-    df = to_frame(rows)
+    df = build_sensor_dataframe(rows, sensor_id=args.sensor)
 
     # Load (idempotent write)
     files = write_parquet_idempotent(df, Path(args.out))

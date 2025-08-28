@@ -16,10 +16,6 @@ RETRY_DELAYS       = (1, 2, 3)                  # Wait times between retries
 RESULTS_PER_PAGE   = 100                        # Max rows per page
 PAGE_DELAY         = 5                          # Delay between page fetches
 
-# Type alias for a sensor measurement record
-# e.g. {"sensor_id": 359, "parameter": "pm25", "value": 12.3}
-Measurement = dict[str, object]
-
 
 def _create_api_session() -> requests.Session:
     """Create and return an API session with the key attached."""
@@ -55,27 +51,8 @@ def _fetch_raw_page(session, url, params) -> dict[str, object]:
             response.raise_for_status()
 
 
-def _normalize_measurement(raw_item, sensor_id) -> Measurement:
-    """Convert one raw record from the API 'results' list into a Measurement dict."""
-
-    # Extract nested fields
-    param_info    = raw_item.get("parameter")       or {}
-    period_info   = raw_item.get("period")          or {}
-    datetime_info = period_info.get("datetimeFrom") or {}
-
-    # Map the raw fields into a consistent format
-    measurement = {
-        "sensor_id": str(sensor_id),
-        "parameter": param_info.get("name"),
-        "unit":      param_info.get("units"),
-        "value":     raw_item.get("value"),
-        "date_utc":  datetime_info.get("utc")
-    }
-    return measurement
-
-
-def collect_sensor_measurements(sensor_id, start_time, max_pages=50) -> list[Measurement]:
-    """Return normalized measurements for one sensor from `start_time` onward."""
+def collect_sensor_data(sensor_id, start_time, max_pages=50) -> list[dict[str, object]]:
+    """Return raw API 'results' items for one sensor from `start_time` onward."""
     all_measurements = []
 
     endpoint_url = f"{API_BASE_URL}/sensors/{sensor_id}/measurements"
@@ -94,11 +71,9 @@ def collect_sensor_measurements(sensor_id, start_time, max_pages=50) -> list[Mea
             if not raw_items: # No more data
                 break
 
-            # Normalize and collect records
-            for raw_item in raw_items:
-                measurement = _normalize_measurement(raw_item, sensor_id)
-                all_measurements.append(measurement)
+            # Collect raw records
+            all_measurements.extend(raw_items)
 
             time.sleep(PAGE_DELAY)  # Avoid rate limits
 
-    return all_measurements  # Full list of normalized records
+    return all_measurements  # Full list of raw records
