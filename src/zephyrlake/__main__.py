@@ -25,9 +25,12 @@ def main() -> None:
     args = parser.parse_args()
 
     # Extract
+    # Coerce plain dates (YYYY-MM-DD) to UTC midnight (YYYY-MM-DDT00:00:00Z)
+    # See docs/time-boundaries.md for why.
+    since = args.since if "T" in args.since else f"{args.since}T00:00:00Z"
     rows = collect_sensor_measurements(
         sensor_id=args.sensor,
-        start_time=args.since,
+        start_time=since,
         max_pages=args.pages
     )
     print(f"Fetched {len(rows)} rows from sensor {args.sensor} since {args.since}")
