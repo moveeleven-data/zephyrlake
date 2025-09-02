@@ -3,36 +3,29 @@
 
 import json
 from pathlib import Path
-
 import pandas as pd
 
-from zephyrlake.transform import to_frame
-
+from zephyrlake.transform import build_sensor_dataframe  # ← align with src
 
 def test_transform_basic():
-    """Raw JSON fixture should become a typed, non-empty DataFrame."""
-    sample_path = (
-        Path(__file__).parent.parent / "data" / "samples" / "measurements_sample.json"
-    )
+    # Given raw JSON fixture from OpenAQ
+    sample_path = Path(__file__).parent.parent / "data" / "samples" / "measurements_sample.json"
     rows = json.loads(sample_path.read_text())
 
-    df = to_frame(rows)
+    # When we normalize into a DataFrame
+    df = build_sensor_dataframe(rows, sensor_id=359)
 
-    # Should not be empty
+    # Then the frame is non-empty and has the expected columns
     assert not df.empty
-
-    # Required columns are present
     expected = {
-        "city",
-        "country",
-        "location",
-        "parameter",
-        "unit",
-        "value",
-        "date_utc",
-        "event_date",
+        "sensor_id", "parameter", "unit", "value", "date_utc", "event_date",
     }
-    assert expected.issubset(df.columns)
+    assert expected == set(df.columns)
 
-    # Timestamp column should be timezone-aware
+    # Then timestamp is timezone-aware and event_date is a string partition key
     assert isinstance(df["date_utc"].dtype, pd.DatetimeTZDtype)
+    assert df["event_date"].dtype == "string"
+
+    # Then sensor_id is carried and typed as string, and value is numeric
+    assert df["sensor_id"].map(type).eq(str).all()
+    assert pd.api.types.is_numeric_dtype(df["value"])

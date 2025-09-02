@@ -2,14 +2,12 @@
 # Prove the Parquet writer is idempotent.
 
 from pathlib import Path
-
 import pandas as pd
 
 from zephyrlake.load import write_parquet_idempotent
 
-
 def test_idempotent_write(tmp_path: Path):
-    """Re-running the same data should not create a new Parquet file."""
+    # Given a single-day DataFrame
     df = pd.DataFrame(
         {
             "city": ["X"],
@@ -23,10 +21,16 @@ def test_idempotent_write(tmp_path: Path):
         }
     )
 
-    # First write creates a file
-    first_write = write_parquet_idempotent(df, tmp_path)
-    assert len(first_write) == 1
+    # When we write it the first time
+    first = write_parquet_idempotent(df, tmp_path)
 
-    # Second write detects same partition/signature → no new file
-    second_write = write_parquet_idempotent(df, tmp_path)
-    assert len(second_write) == 0
+    # Then exactly one file exists under the correct partition path
+    assert len(first) == 1
+    assert first[0].parent.name == "event_date=2025-08-01"
+    assert first[0].name.startswith("part-") and first[0].suffix == ".parquet"
+
+    # When we write the same rows again in a different order
+    second = write_parquet_idempotent(df.sample(frac=1, random_state=0), tmp_path)
+
+    # Then nothing new is written
+    assert second == []
