@@ -37,7 +37,7 @@ def _partition_hash(event_date: str, day_frame: pd.DataFrame) -> str:
 
 def _write_atomic_parquet(frame: pd.DataFrame, dest: Path) -> None:
     """
-    Save a DataFrame as Parquet safely.
+    Save a DataFrame as Parquet.
 
     Writing directly to the final file (e.g. `part-abc123.parquet`)
     risks leaving behind a broken file if the process is interrupted.
