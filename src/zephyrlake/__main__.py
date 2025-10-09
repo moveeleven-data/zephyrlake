@@ -1,13 +1,15 @@
-# src/zephyrlake/__main__.py
+# src/zephyrlake/app.py
 # CLI entrypoint: run extract → transform → load for one sensor/date range.
 
+from dotenv import load_dotenv
+
 from .cli import parse_cli_args
-from .app import load_env, run_pipeline, summarize_run
+from .app import run_pipeline, summarize_run
 
 
 def main() -> None:
     # Load OpenAQ key into environment
-    load_env()
+    load_dotenv()
 
     # Parse CLI arguments into Namespace
     args = parse_cli_args()

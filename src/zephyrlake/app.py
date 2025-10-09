@@ -8,15 +8,6 @@ from .transform import build_sensor_dataframe
 from .load import write_parquet_idempotent
 
 
-def load_env() -> None:
-    """Load .env for local development."""
-    try:
-        from dotenv import load_dotenv
-        load_dotenv()
-    except ImportError:
-        pass
-
-
 def run_pipeline(
     sensor_id: int,
     start_time: str,
@@ -30,18 +21,25 @@ def run_pipeline(
       - Load: write idempotent Parquet partitions
     Return summary stats for reporting.
     """
-    # Extract
-    start_iso = start_time if "T" in start_time else f"{start_time}T00:00:00Z"
+
+    # Fetch raw sensor data from the OpenAQ API
+    if "T" in start_time:
+        # Input already contains a time component in ISO format
+        start_iso = start_time
+    else:
+        # If only a date was provided, normalize it to midnight UTC
+        start_iso = f"{start_time}T00:00:00Z"
+
     raw_rows = collect_sensor_data(
         sensor_id=sensor_id,
         start_time=start_iso,
         max_pages=max_pages,
     )
 
-    # Transform
+    # Normalize JSON into a typed DataFrame
     df = build_sensor_dataframe(raw_rows, sensor_id=sensor_id)
 
-    # Load
+    # Write partitioned Parquet files
     files = write_parquet_idempotent(df, output_dir)
     day_count = int(df["event_date"].nunique()) if not df.empty else 0
 

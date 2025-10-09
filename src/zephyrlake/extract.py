@@ -30,7 +30,8 @@ def _create_api_session() -> requests.Session:
 
 
 def _fetch_raw_page(session, url, params) -> dict[str, object]:
-    """Fetch one page of raw measurement records from the OpenAQ API.
+    """
+    Fetch one page of raw measurement records from the OpenAQ API.
 
     Returns dict with 'results' (raw records) and 'meta' (paging info)
     """
