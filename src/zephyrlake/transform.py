@@ -12,8 +12,8 @@ def normalize_measurement(raw_item, sensor_id) -> Measurement:
     """Convert one raw record from the API 'results' list into a Measurement dict."""
 
     # Extract nested fields
-    param_info    = raw_item.get("parameter")       or {}
-    period_info   = raw_item.get("period")          or {}
+    param_info    = raw_item.get("parameter") or {}
+    period_info   = raw_item.get("period") or {}
     datetime_info = period_info.get("datetimeFrom") or {}
 
     # Map the raw fields into a consistent format
