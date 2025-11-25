@@ -66,8 +66,6 @@ PYTHONPATH=src python -m zephyrlake --sensor 359 --since 2025-08-01 --out data/o
 Files are written as Parquet under `data/out/`, with one folder per day (`event_date=YYYY-MM-DD/`).
 Each file is named with a deterministic hash of its contents to ensure idempotency.
 
-You should see logs for each page fetched and files written under:
-
 Example run output:
 
 ```bash
